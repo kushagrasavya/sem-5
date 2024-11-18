@@ -1,0 +1,37 @@
+def is_safe(board, row, col, N):
+    # Check column
+    for i in range(row):
+        if board[i] == col or abs(board[i] - col) == abs(i - row):
+            return False
+    return True
+
+def solve_n_queens(board, row, N, solutions):
+    # If all queens are placed
+    if row == N:
+        solutions.append(board[:])  # Found a solution, add it to the list
+        return
+
+    # Try placing a queen in each column of the current row
+    for col in range(N):
+        if is_safe(board, row, col, N):
+            board[row] = col  # Place the queen
+            solve_n_queens(board, row + 1, N, solutions)  # Recursively place the next queen
+            board[row] = -1  # Backtrack: remove the queen
+
+def n_queens(N):
+    board = [-1] * N  # Create a board, -1 means no queen placed in that row
+    solutions = []
+    solve_n_queens(board, 0, N, solutions)
+    return solutions
+
+def print_solutions(solutions):
+    for solution in solutions:
+        for row in solution:
+            print(' '.join('Q' if col == row else '.' for col in range(len(solution))))
+        print()
+
+# Example usage
+N = 4  # Size of the board (4x4)
+solutions = n_queens(N)
+print(f"Number of solutions for {N}-Queens: {len(solutions)}")
+print_solutions(solutions)
